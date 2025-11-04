@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tarjetas de Políticos</title>
+    <link rel="stylesheet" href="/static/styles/politicos.css">
+
+</head>
+<body>
+{% with mensajes = get_flashed_messages() %}
+  {% if mensajes %}
+    <div class="flash">
+      {% for m in mensajes %}
+        <p>{{ m }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+  <header>
+  <div class="logo-titulo">
+    <button class="logo-btn">
+      <img src="/static/img/lobo_cordero.jpg" alt="Logo" height="50">
+    </button>
+    <h1>Lobo Cordero - Perfiles Políticos</h1>
+  </div>
+
+  <nav>
+    <a href="{{ url_for('inicio') }}">Inicio</a>
+  </nav>
+</header>
+    <a class="back-btn" href="{{ url_for('inicio') }}" onclick="history.back(); return false;" aria-label="Volver">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+    </a>
+  <section class="seccion">
+    {% for politico in politicos %}
+    <section class="scene">
+      <section class="tarjeta">
+        <div class="cara frente">
+          <div class="avatar">
+            <img src="{{ url_for('static', filename='img/' + (politico.foto if politico.foto else 'default.jpg')) }}" alt="Foto de {{ politico.nombre }}">
+          </div>
+          <div class="info">
+            <h3>{{ politico.nombre }}</h3>
+            <p>Partido: {{ politico.partido }}</p>
+            <p>Cargo: {{ politico.titulo }}</p>
+          </div>
+          
+          <div class="botones">
+            <div class="boton-encuestas">
+              <button class="btn-encuesta" onclick="window.location.href='/encuesta/{{ politico.id }}'">Hacer encuesta</button>
+              <button class="btn-verencuesta" onclick="window.location.href='/resultados/{{ politico.id }}'">Ver encuesta</button>
+            </div>
+            <button class="btn-vermas">Ver más</button>
+          </div>
+        </div>
+
+        <div class="cara dorso proyectos-scroll">
+          <h3>Proyectos de {{ politico.nombre }}</h3>
+          {% if politico.proyectos %}
+            <ul><br>
+              {% for proyecto in politico.proyectos %}
+              <strong>{{ proyecto.titulo }}</strong><br><br>
+                <li>
+                  {{ proyecto.descripcion }}
+                  <br><br>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p>No hay proyectos registrados para este político.</p>
+          {% endif %}
+          <button class="btn-volver">Volver</button>
+        </div>
+      </section>
+    </section>
+    {% endfor %}
+  </section>
+
+  <script>
+    document.querySelectorAll('.scene').forEach(scene=>{
+      const card=scene.querySelector('.tarjeta');
+      const verMas=card.querySelector('.btn-vermas');
+      const volver=card.querySelector('.btn-volver');
+      if(verMas){verMas.addEventListener('click',()=>card.classList.add('is-flipped'));}
+      if(volver){volver.addEventListener('click',()=>card.classList.remove('is-flipped'));}
+    });
+  </script>
+
+</body>
+</html>

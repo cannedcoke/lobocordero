@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Encuesta</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/styleEncuesta.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- Botón volver -->
+    <a class="back-btn" href="{{ url_for('inicio') }}" onclick="history.back(); return false;" aria-label="Volver">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+    </a>
+
+    <form action="{{ url_for('encuesta', id_politico=p.id) }}" method="POST">
+      <input type="hidden" name="id_politico" value="{{ p.id }}" />
+      <input type="hidden" name="redirect_url" value="{{ request.referrer }}">
+
+
+      {% if mensajes %}
+      <script>
+        alert("{{ mensajes[0] }}");
+      </script>
+      {% endif %}
+<header>
+  <div class="logo-titulo">
+    <button class="logo-btn">
+      <img src="/static/img/lobo_cordero.jpg" alt="Logo" height="50">
+    </button>
+    <h1>Lobo Cordero - Encuestas</h1>
+  </div>
+
+  <nav>
+    <a href="{{ url_for('mostrar_encuesta') }}">Politicos</a>
+    <a href="{{ url_for('inicio') }}">Inicio</a>
+  </nav>
+</header>
+
+      <div class="card">
+        <h1>Encuesta sobre</h1>
+        <h2>{{ p.nombre }} — {{ p.partido }}</h2>
+
+
+        <div id="container">
+          <p>¿Considerás que {{ p.nombre }} cumple con sus promesas de campaña?</p>
+          <label><input type="radio" name="preg1" value="1" required /> Siempre</label><br />
+          <label><input type="radio" name="preg1" value="2" /> A veces</label><br />
+          <label><input type="radio" name="preg1" value="3" /> Casi nunca</label><br />
+          <label><input type="radio" name="preg1" value="4" /> Nunca</label><br /><br />
+
+          <p>¿Qué nivel de transparencia percibís en la gestión de {{ p.nombre }}?</p>
+          <label><input type="radio" name="preg2" value="1" required /> Alta</label><br />
+          <label><input type="radio" name="preg2" value="2" /> Media</label><br />
+          <label><input type="radio" name="preg2" value="3" /> Baja</label><br />
+          <label><input type="radio" name="preg2" value="4" /> Inexistente</label><br /><br />
+
+          <p>¿Creés que los recursos administrados por {{ p.nombre }} se usan correctamente?</p>
+          <label><input type="radio" name="preg3" value="1" required /> Sí, con eficiencia</label><br />
+          <label><input type="radio" name="preg3" value="2" /> Parcialmente</label><br />
+          <label><input type="radio" name="preg3" value="3" /> No, se desaprovechan</label><br />
+          <label><input type="radio" name="preg3" value="4" /> No tengo información</label><br /><br />
+
+          <p>¿Volverías a votar por {{ p.nombre }}?</p>
+          <label><input type="radio" name="preg4" value="1" required /> Sí, sin dudas</label><br />
+          <label><input type="radio" name="preg4" value="2" /> Tal vez</label><br />
+          <label><input type="radio" name="preg4" value="3" /> No</label><br /><br />
+
+          <p>¿Qué tan comprometido/a percibís a {{ p.nombre }} con el bienestar ciudadano?</p>
+          <label><input type="radio" name="preg5" value="1" required /> Muy comprometido/a</label><br />
+          <label><input type="radio" name="preg5" value="2" /> Algo comprometido/a</label><br />
+          <label><input type="radio" name="preg5" value="3" /> Poco comprometido/a</label><br />
+          <label><input type="radio" name="preg5" value="4" /> Nada comprometido/a</label><br /><br />
+
+          <p>¿Creés que {{ p.nombre }} rinde cuentas de sus decisiones ante la ciudadanía?</p>
+          <label><input type="radio" name="preg6" value="1" required /> Regularmente</label><br />
+          <label><input type="radio" name="preg6" value="2" /> Solo cuando lo obligan</label><br />
+          <label><input type="radio" name="preg6" value="3" /> Casi nunca</label><br />
+          <label><input type="radio" name="preg6" value="4" /> Nunca</label><br /><br />
+
+          <p>¿Qué palabra describe mejor a {{ p.nombre }} según tu percepción?</p>
+          <label><input type="radio" name="preg7" value="1" required /> Responsable</label><br />
+          <label><input type="radio" name="preg7" value="2" /> Ineficiente</label><br />
+          <label><input type="radio" name="preg7" value="3" /> Desconectado/a</label><br />
+          <label><input type="radio" name="preg7" value="4" /> Transparente</label><br />
+          <label><input type="radio" name="preg7" value="5" /> Dudosamente ético/a</label><br /><br />
+        </div>
+
+        <div class="btn-container">
+          <button type="submit">Enviar</button>
+        </div>
+      </div>
+    </form>
+
+    <script>
+      const images = [
+        "/static/img/bg1.jpg",
+        "/static/img/bg2.jpg",
+        "/static/img/bg3.jpg",
+        "/static/img/bg4.jpg",
+        "/static/img/bg5.jpg",
+        "/static/img/bg6.jpg",
+        "/static/img/bg7.jpg",
+        "/static/img/bg8.jpg",
+      ];
+
+      let i = 0;
+      const bg = document.body;
+      function setBackground(url) {
+        bg.style.setProperty("--bg-url", `url(${url})`);
+        document.styleSheets[0].insertRule(
+          `body::before { background-image: url(${url}); }`,
+          document.styleSheets[0].cssRules.length
+        );
+      }
+      setBackground(images[0]);
+      setInterval(() => {
+        i = (i + 1) % images.length;
+        setBackground(images[i]);
+      }, 2000);
+    </script>
+  </body>
+</html>
