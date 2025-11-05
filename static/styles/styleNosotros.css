@@ -227,3 +227,84 @@ footer {
 .back-btn:hover svg {
   stroke: #0f172a;
 }
+/* ======== AJUSTES RESPONSIVE ======== */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    height: auto;
+    padding: 0.8rem;
+    text-align: center;
+  }
+
+  .logo-titulo {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  nav a {
+    display: inline-block;
+    margin: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  /* espacio extra entre header y primera imagen */
+  .principal {
+    margin-top: 130px;
+    padding: 0 25px;
+    gap: 40px;
+  }
+
+  /* reduce ancho de imagen con efecto bandera */
+  .bandera {
+    width: 90%;
+    height: 400px;
+  }
+
+  /* más espacio entre imagen y texto */
+  .contenido-horizontal {
+    gap: 40px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* texto más legible en pantallas pequeñas */
+  .texto {
+    max-width: 90%;
+    font-size: 0.95rem;
+  }
+
+  .intro {
+    margin-top: 40px;
+    padding: 30px;
+  }
+
+  footer {
+    font-size: 0.8rem;
+    padding: 20px 10px;
+  }
+
+  .back-btn {
+    top: 110px;
+    left: 15px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bandera {
+    height: 320px;
+  }
+
+  .principal {
+    margin-top: 140px;
+  }
+
+  .intro p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  nav a {
+    font-size: 0.8rem;
+  }
+}

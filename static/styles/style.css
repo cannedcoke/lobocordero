@@ -270,6 +270,120 @@ footer {
 .footer-social a:hover {
   opacity: 0.6;
 }
+/* ======== RESPONSIVE (CELULARES) ======== */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    height: auto;
+    padding: 0.8rem;
+    text-align: center;
+  }
+
+  .logo-titulo {
+    gap: 15px;
+    flex-direction: column;
+  }
+
+  nav a {
+    display: inline-block;
+    margin: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  .hero {
+    padding: 40px 15px;
+  }
+
+  .hero h1 {
+    font-size: 1.8em;
+  }
+
+  .hero p {
+    font-size: 1em;
+  }
+
+  .candidatos {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+  }
+
+  .tarjeta {
+    width: 90%;
+    margin: 15px 0;
+  }
+
+  .mensaje {
+    width: 90%;
+    font-size: 0.9rem;
+    padding: 15px;
+  }
+
+  .botones button {
+    width: 80%;
+    font-size: 0.9rem;
+    padding: 12px 0;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+  }
+
+  .footer-col {
+    min-width: 100%;
+  }
+
+  .footer-social {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 1.5em;
+  }
+
+  nav a {
+    margin: 6px;
+    font-size: 0.85rem;
+  }
+
+  .tarjeta {
+    width: 95%;
+  }
+
+  .footer-col h3 {
+    font-size: 1rem;
+  }
+
+  .footer-copy {
+    font-size: 0.75rem;
+  }
+}
+/* ======== AJUSTES DE ESPACIADO ======== */
+
+/* más espacio entre el header fijo y la primera sección o imagen */
+.hero {
+  margin-top: 90px; /* separa del header */
+}
+
+/* más espacio entre la foto y el texto dentro de cada tarjeta */
+.tarjeta .foto {
+  margin-bottom: 25px; /* antes era 40px, aumentalo si querés más */
+}
+
+/* en pantallas pequeñas, aumenta aún más la separación */
+@media (max-width: 768px) {
+  .hero {
+    margin-top: 180px;
+  }
+
+  .tarjeta .foto {
+    margin-bottom: 55px;
+  }
+}
 
 
 
