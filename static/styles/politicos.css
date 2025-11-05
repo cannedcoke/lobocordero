@@ -1,15 +1,19 @@
+/* esto define el fondo y la fuente general del sitio */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background: linear-gradient(180deg, #f3f4f6, #e6eef0);
 }
+
+/* esto mantiene el fondo fijo y el alto total de la página */
 html, body {
   height: 100%;
   margin: 0;
-   background: linear-gradient(180deg, #f3f4f6, #e6eef0);
+  background: linear-gradient(180deg, #f3f4f6, #e6eef0);
   background-attachment: fixed;
 }
 
+/* esta sección contiene todas las tarjetas de los políticos */
 .seccion {
   min-height: 100vh;
   display: flex;
@@ -19,6 +23,7 @@ html, body {
   padding: 60px 20px;
 }
 
+/* este es el encabezado fijo de arriba con el logo y los links */
 header {
   background-color: #1e2a38;
   color: white;
@@ -34,22 +39,24 @@ header {
   z-index: 1000;
 }
 
-
+/* esto ajusta la disposición y el espacio de las tarjetas */
 .seccion {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
   padding: 90px;
-   margin-top: 8vh;
+  margin-top: 8vh;
 }
 
+/* cada tarjeta vive dentro de un “scene”, que maneja el efecto 3D */
 .scene {
   width: 300px;
   height: 400px;
   perspective: 1000px;
 }
 
+/* esta es la estructura principal de cada tarjeta */
 .tarjeta {
   width: 100%;
   height: 100%;
@@ -62,10 +69,12 @@ header {
   background: linear-gradient(180deg, #ffffff, #fbfdff);
 }
 
+/* cuando la tarjeta está girada */
 .tarjeta.is-flipped {
   transform: rotateY(180deg);
 }
 
+/* estas son las caras de la tarjeta (frente y dorso) */
 .cara {
   position: absolute;
   width: 100%;
@@ -80,6 +89,7 @@ header {
   padding: 20px;
 }
 
+/* esto es la foto del político en la parte frontal */
 .frente .avatar {
   width: 120px;
   height: 120px;
@@ -88,27 +98,32 @@ header {
   border: 5px solid rgba(43, 122, 120, 0.2);
 }
 
+/* la imagen dentro del avatar */
 .frente .avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
+/* esto muestra el nombre y datos del político */
 .info {
   margin-top: 15px;
   text-align: center;
 }
 
+/* nombre del político */
 .info h3 {
   margin: 5px 0;
   color: #0f172a;
 }
 
+/* partido o título del político */
 .info p {
   margin: 3px 0;
   color: #6b7280;
 }
 
+/* bloque general de botones debajo del texto */
 .botones {
   margin-top: 15px;
   display: flex;
@@ -118,6 +133,7 @@ header {
   width: 100%;
 }
 
+/* contenedor de los dos primeros botones */
 .boton-encuestas {
   display: flex;
   justify-content: center;
@@ -125,6 +141,7 @@ header {
   width: 100%;
 }
 
+/* formato común de los botones */
 .botones button {
   padding: 10px 14px;
   border: none;
@@ -133,22 +150,26 @@ header {
   font-weight: bold;
 }
 
+/* botón para responder encuesta */
 .btn-encuesta {
   background-color: #1e2a38;
   color: #fff;
 }
 
+/* botón para ver resultados */
 .btn-verencuesta {
   background: #2a444d;
   color: #fff;
 }
 
+/* botón “ver más”, que gira la tarjeta */
 .btn-vermas {
   background: #fff;
   border: 1px solid #ccc;
   width: 80%;
 }
 
+/* dorso de la tarjeta, lo que aparece al girarla */
 .dorso {
   background: #0f172a;
   color: #fff;
@@ -159,15 +180,18 @@ header {
   justify-content: flex-between;
 }
 
+/* título dentro del dorso */
 .dorso h3 {
   margin-bottom: 10px;
 }
 
+/* descripción de los proyectos */
 .dorso p {
   font-size: 0.9rem;
   line-height: 1.5;
 }
 
+/* botón que devuelve al frente de la tarjeta */
 .btn-volver {
   margin-top: 20px;
   background: #fff;
@@ -179,6 +203,7 @@ header {
   font-weight: bold;
 }
 
+/* esto permite hacer scroll dentro del dorso si hay muchos proyectos */
 .proyectos-scroll {
   max-height: 95%;
   overflow-y: auto;
@@ -186,7 +211,7 @@ header {
   flex: 1;
 }
 
-/* Scrollbar transparente */
+/* diseño del scroll transparente */
 .proyectos-scroll::-webkit-scrollbar {
   width: 8px;
 }
@@ -204,12 +229,13 @@ header {
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* Firefox */
+/* configuración del scroll para Firefox */
 .proyectos-scroll {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
+/* acomoda el contenido frontal */
 .frente {
   display: flex;
   flex-direction: column;
@@ -220,6 +246,7 @@ header {
   box-sizing: border-box;
 }
 
+/* lista de proyectos en el dorso */
 .dorso ul {
   list-style: none;
   padding: 0;
@@ -227,20 +254,24 @@ header {
   padding-top: 90px;
 }
 
+/* cada proyecto dentro del dorso */
 .dorso li {
   text-align: left;
 }
 
+/* títulos dentro de los proyectos */
 strong {
   text-align: center;
 }
 
+/* esto alinea el logo con el texto del título */
 .logo-titulo {
   display: flex;
   align-items: center;
-  gap: 50px; /* Espacio entre el logo y el texto */
+  gap: 50px;
 }
 
+/* botón del logo sin estilo de botón normal */
 .logo-btn {
   background: none;
   border: none;
@@ -248,11 +279,14 @@ strong {
   padding: 0;
 }
 
+/* imagen del logo */
 .logo-btn img {
   height: 50px;
   width: auto;
   border-radius: 5px;
 }
+
+/* enlaces del menú de navegación */
 nav a {
   color: white;
   text-decoration: none;
@@ -260,14 +294,20 @@ nav a {
   font-weight: bold;
   margin-right: 60px;
 }
+
+/* formato para ambas caras de la tarjeta */
 .dorso, .frente {
   height: 100%;
   box-sizing: border-box;
   padding: 30px 20px;
 }
+
+/* altura del scroll de los proyectos */
 .proyectos-scroll {
-  max-height: calc(100% );
+  max-height: calc(100%);
 }
+
+/* animación de movimiento al pasar el mouse sobre la tarjeta */
 .scene {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -276,6 +316,8 @@ nav a {
   transform: translateY(-10px) scale(1.03);
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.25);
 }
+
+/* botón redondo de volver (fijo arriba a la izquierda) */
 .back-btn {
   position: fixed;
   top: 90px;
@@ -291,15 +333,14 @@ nav a {
   transition: background 0.3s ease, transform 0.3s ease;
 }
 
+/* efecto al pasar el mouse sobre el botón de volver */
 .back-btn:hover {
   background: rgba(240, 240, 240, 0.9);
   cursor: pointer;
   transform: scale(1.1);
 }
 
-
-
-
+/* mensaje flotante que aparece temporalmente (flash) */
 .flash {
   position: fixed;
   top: 80px;
@@ -314,6 +355,7 @@ nav a {
   animation: fadeOut 4s forwards;
 }
 
+/* animación para desaparecer el mensaje flash */
 @keyframes fadeOut {
   0%, 80% { opacity: 1; }
   100% { opacity: 0; display: none; }

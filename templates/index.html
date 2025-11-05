@@ -1,122 +1,210 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+    <!-- Definición del conjunto de caracteres y vista adaptable -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lobo Cordero</title>
+    <!-- Enlace al archivo CSS principal -->
     <link rel="stylesheet" href="/static/styles/style.css" />
   </head>
   <body>
+    <!-- Encabezado principal de la página -->
     <header>
       <div class="logo-titulo">
-        <button class="logo-btn">
-          <img src="/static/img/lobo_cordero.jpg" alt="Logo" height="50" />
-        </button> 
-        <h1>Lobo Cordero - Perfiles Políticos</h1>
+        <!-- Botón con logo accesible -->
+        <button class="logo-btn" aria-label="Inicio Lobo Cordero">
+          <img
+            src="/static/img/lobo_cordero.jpg"
+            alt="Logo de Lobo Cordero"
+            height="50"
+          />
+        </button>
+        <h1>Lobo Cordero</h1>
       </div>
 
-      <nav>
+      <!-- Navegación principal -->
+      <nav aria-label="Navegación principal">
+        <a href="{{ url_for('mostrar_encuesta') }}">Políticos</a>
         <a href="{{ url_for('nosotros') }}">Sobre nosotros</a>
-        <a href="{{ url_for('mostrar_encuesta') }}">Politicos</a>
-        <a href="#footer">Información</a>
       </nav>
     </header>
 
+    <!-- Sección de introducción del sitio -->
     <section class="hero">
       <h1>Conoce a tus representantes</h1>
       <p>
         Nuestro propósito es brindarte información accesible y verificada sobre
-        las figuras políticas del país. Queremos acercarte a tus representantes
+        las figuras políticas del país. Queremos acercarte a tus representantes.
       </p>
       <div class="imagen">
-        <img src="static/img/Palacio_de_lopez.jpg" height="250PX" width="80%" />
+        <!-- Imagen ilustrativa con texto alternativo descriptivo -->
+        <img
+          src="static/img/Palacio_de_lopez.jpg"
+          alt="Palacio de López, sede del gobierno paraguayo"
+          height="250"
+          width="80%"
+        />
       </div>
     </section>
 
-    <section id="candidatos" class="candidatos">
-<div class="tarjeta" data-href="{{ url_for('mostrar_presidentes') }}">
-  <div class="foto"><img src="static/img/Despacho.jpg" /></div>
-  <h3>Presidente</h3>
-</div>
+    <!-- Sección de categorías de políticos -->
+    <section
+      id="candidatos"
+      class="candidatos"
+      aria-label="Categorías de representantes"
+    >
+      <!-- Tarjeta de presidente -->
+      <div
+        class="tarjeta"
+        role="button"
+        tabindex="0"
+        data-href="{{ url_for('mostrar_presidentes') }}"
+        aria-label="Ver Presidentes"
+      >
+        <div class="foto">
+          <img src="static/img/Despacho.jpg" alt="Despacho presidencial" />
+        </div>
+        <h3>Presidente</h3>
+      </div>
 
-<div class="tarjeta" data-href="{{ url_for('mostrar_diputados') }}">
-  <div class="foto"><img src="static/img/Camara_de_diputados.jpeg" /></div>
-  <h3>Diputados</h3>
-</div>
+      <!-- Tarjeta de diputados -->
+      <div
+        class="tarjeta"
+        role="button"
+        tabindex="0"
+        data-href="{{ url_for('mostrar_diputados') }}"
+        aria-label="Ver Diputados"
+      >
+        <div class="foto">
+          <img
+            src="static/img/Camara_de_diputados.jpeg"
+            alt="Cámara de Diputados"
+          />
+        </div>
+        <h3>Diputados</h3>
+      </div>
 
-<div class="tarjeta" data-href="{{ url_for('mostrar_senadores') }}">
-  <div class="foto"><img src="static/img/camara_de_senadores.jpg" /></div>
-  <h3>Senadores</h3>
-</div>
+      <!-- Tarjeta de senadores -->
+      <div
+        class="tarjeta"
+        role="button"
+        tabindex="0"
+        data-href="{{ url_for('mostrar_senadores') }}"
+        aria-label="Ver Senadores"
+      >
+        <div class="foto">
+          <img
+            src="static/img/camara_de_senadores.jpg"
+            alt="Cámara de Senadores"
+          />
+        </div>
+        <h3>Senadores</h3>
+      </div>
 
-<script>
-  document.querySelectorAll(".tarjeta").forEach(t =>
-    t.addEventListener("click", () => window.location.href = t.dataset.href)
-  );
-</script>
-
+      <!-- Script para redireccionar al hacer clic en las tarjetas -->
+      <script>
+        document.querySelectorAll(".tarjeta").forEach((t) => {
+          t.addEventListener(
+            "click",
+            () => (window.location.href = t.dataset.href)
+          );
+          // Accesibilidad: permite navegar con teclado
+          t.addEventListener("keypress", (e) => {
+            if (e.key === "Enter" || e.key === " ")
+              window.location.href = t.dataset.href;
+          });
+        });
+      </script>
     </section>
 
+    <!-- Frase destacada motivacional -->
     <div class="mensaje">
       “La participación ciudadana es indispensable para una democracia
       transparente.”
     </div>
 
-
-<footer id="footer">
-  <div class="footer-container">
-    <div class="footer-col">
-      <h3>Lobo Cordero</h3>
-      <p class="subtitulo">Conecta ciudadanía y transparencia</p>
-      <p>
-        Proyecto enfocado en acercar información clara y objetiva sobre
-        representantes públicos y su desempeño.
-      </p>
-    </div>
-
-    <div class="footer-col">
-      <h3>Enlaces</h3>
-      <ul>
-        <li><a href="{{ url_for('inicio') }}">Inicio</a></li>
-        <li><a href="{{ url_for('mostrar_encuesta') }}">Politicos</a></li>
-        <li><a href="#">Encuestas</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-col">
-      <h3>Contacto</h3>
-      <p>soporte@lobocordero.com</p>
-      <p>+595 21 123 456</p>
-      <p>📍 asuncion, Paraguay</p>
-      <div class="footer-social">
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
-        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-      </div>
-    </div>
+    <!-- Pie de página con información y enlaces -->
+    <footer id="footer">
+      <div class="footer-container">
         <div class="footer-col">
-      <h3>Bibliografia</h3>
-      <ul>
-        <li>https://silpy.congreso.gov.py/</li>
-        <li>https://www.abc.com.py/politica/</li>
-        <li>https://www.lanacion.com.py/politica/</li>
-        <li>https://www.senado.gov.py/</li>
-      </ul>
-    </div>
-  </div>
+          <h3>Lobo Cordero</h3>
+          <p class="subtitulo">Conecta ciudadanía y transparencia</p>
+          <p>
+            Proyecto enfocado en acercar información clara y objetiva sobre
+            representantes públicos y su desempeño.
+          </p>
+        </div>
 
-  <div class="footer-copy">
-    © 2025 Lobo Cordero — Todos los derechos reservados.
-  </div>
-</footer>
+        <div class="footer-col">
+          <h3>Contacto</h3>
+          <p>soporte@lobocordero.com</p>
+          <p>+595 21 123 456</p>
+          <p>Asunción, Paraguay</p>
+          <div class="footer-social" aria-label="Redes sociales">
+            <a href="#" aria-label="Facebook"
+              ><i class="fab fa-facebook-f" aria-hidden="true"></i
+            ></a>
+            <a href="#" aria-label="Instagram"
+              ><i class="fab fa-instagram" aria-hidden="true"></i
+            ></a>
+            <a href="#" aria-label="Twitter"
+              ><i class="fab fa-x-twitter" aria-hidden="true"></i
+            ></a>
+            <a href="#" aria-label="LinkedIn"
+              ><i class="fab fa-linkedin-in" aria-hidden="true"></i
+            ></a>
+          </div>
+        </div>
 
-<!-- Font Awesome for white icons -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-/>
+        <div class="footer-col">
+          <h3>Bibliografía</h3>
+          <ul>
+            <li>
+              <a
+                href="https://silpy.congreso.gov.py/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >silpy.congreso.gov.py</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.abc.com.py/politica/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >abc.com.py/politica</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.lanacion.com.py/politica/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >lanacion.com.py/politica</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.senado.gov.py/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >senado.gov.py</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
 
+      <div class="footer-copy">
+        © 2025 Lobo Cordero — Todos los derechos reservados.
+      </div>
+    </footer>
 
+    <!-- Librería de iconos Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
   </body>
 </html>

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+    <!-- Configuración básica de la página -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Encuesta</title>
+    <!-- Enlace al archivo CSS principal -->
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='styles/styleEncuesta.css') }}"
@@ -11,78 +13,89 @@
   </head>
 
   <body>
-    <!-- Botón volver -->
+    <!-- Botón para volver a la página anterior o al inicio -->
     <a class="back-btn" href="{{ url_for('inicio') }}" onclick="history.back(); return false;" aria-label="Volver">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <polyline points="15 18 9 12 15 6" />
       </svg>
     </a>
 
+    <!-- Formulario principal de la encuesta -->
     <form action="{{ url_for('encuesta', id_politico=p.id) }}" method="POST">
+      <!-- Campos ocultos con información del político -->
       <input type="hidden" name="id_politico" value="{{ p.id }}" />
       <input type="hidden" name="redirect_url" value="{{ request.referrer }}">
 
-
+      <!-- Si existen mensajes, se muestra una alerta -->
       {% if mensajes %}
       <script>
         alert("{{ mensajes[0] }}");
       </script>
       {% endif %}
-<header>
-  <div class="logo-titulo">
-    <button class="logo-btn">
-      <img src="/static/img/lobo_cordero.jpg" alt="Logo" height="50">
-    </button>
-    <h1>Lobo Cordero - Encuestas</h1>
-  </div>
 
-  <nav>
-    <a href="{{ url_for('mostrar_encuesta') }}">Politicos</a>
-    <a href="{{ url_for('inicio') }}">Inicio</a>
-  </nav>
-</header>
+      <!-- Encabezado del formulario -->
+      <header>
+        <div class="logo-titulo">
+          <button class="logo-btn" aria-label="Inicio Lobo Cordero">
+            <img src="/static/img/lobo_cordero.jpg" alt="Logo de Lobo Cordero" height="50">
+          </button>
+          <h1>Lobo Cordero - Encuestas</h1>
+        </div>
 
+        <nav aria-label="Navegación principal">
+          <a href="{{ url_for('mostrar_encuesta') }}">Políticos</a>
+          <a href="{{ url_for('inicio') }}">Inicio</a>
+        </nav>
+      </header>
+
+      <!-- Tarjeta principal que contiene todas las preguntas -->
       <div class="card">
         <h1>Encuesta sobre</h1>
         <h2>{{ p.nombre }} — {{ p.partido }}</h2>
 
-
         <div id="container">
+          <!-- Pregunta 1 -->
           <p>¿Considerás que {{ p.nombre }} cumple con sus promesas de campaña?</p>
           <label><input type="radio" name="preg1" value="1" required /> Siempre</label><br />
           <label><input type="radio" name="preg1" value="2" /> A veces</label><br />
           <label><input type="radio" name="preg1" value="3" /> Casi nunca</label><br />
           <label><input type="radio" name="preg1" value="4" /> Nunca</label><br /><br />
 
+          <!-- Pregunta 2 -->
           <p>¿Qué nivel de transparencia percibís en la gestión de {{ p.nombre }}?</p>
           <label><input type="radio" name="preg2" value="1" required /> Alta</label><br />
           <label><input type="radio" name="preg2" value="2" /> Media</label><br />
           <label><input type="radio" name="preg2" value="3" /> Baja</label><br />
           <label><input type="radio" name="preg2" value="4" /> Inexistente</label><br /><br />
 
+          <!-- Pregunta 3 -->
           <p>¿Creés que los recursos administrados por {{ p.nombre }} se usan correctamente?</p>
           <label><input type="radio" name="preg3" value="1" required /> Sí, con eficiencia</label><br />
           <label><input type="radio" name="preg3" value="2" /> Parcialmente</label><br />
           <label><input type="radio" name="preg3" value="3" /> No, se desaprovechan</label><br />
           <label><input type="radio" name="preg3" value="4" /> No tengo información</label><br /><br />
 
+          <!-- Pregunta 4 -->
           <p>¿Volverías a votar por {{ p.nombre }}?</p>
           <label><input type="radio" name="preg4" value="1" required /> Sí, sin dudas</label><br />
           <label><input type="radio" name="preg4" value="2" /> Tal vez</label><br />
           <label><input type="radio" name="preg4" value="3" /> No</label><br /><br />
 
+          <!-- Pregunta 5 -->
           <p>¿Qué tan comprometido/a percibís a {{ p.nombre }} con el bienestar ciudadano?</p>
           <label><input type="radio" name="preg5" value="1" required /> Muy comprometido/a</label><br />
           <label><input type="radio" name="preg5" value="2" /> Algo comprometido/a</label><br />
           <label><input type="radio" name="preg5" value="3" /> Poco comprometido/a</label><br />
           <label><input type="radio" name="preg5" value="4" /> Nada comprometido/a</label><br /><br />
 
+          <!-- Pregunta 6 -->
           <p>¿Creés que {{ p.nombre }} rinde cuentas de sus decisiones ante la ciudadanía?</p>
           <label><input type="radio" name="preg6" value="1" required /> Regularmente</label><br />
           <label><input type="radio" name="preg6" value="2" /> Solo cuando lo obligan</label><br />
           <label><input type="radio" name="preg6" value="3" /> Casi nunca</label><br />
           <label><input type="radio" name="preg6" value="4" /> Nunca</label><br /><br />
 
+          <!-- Pregunta 7 -->
           <p>¿Qué palabra describe mejor a {{ p.nombre }} según tu percepción?</p>
           <label><input type="radio" name="preg7" value="1" required /> Responsable</label><br />
           <label><input type="radio" name="preg7" value="2" /> Ineficiente</label><br />
@@ -91,13 +104,16 @@
           <label><input type="radio" name="preg7" value="5" /> Dudosamente ético/a</label><br /><br />
         </div>
 
+        <!-- Botón de envío del formulario -->
         <div class="btn-container">
           <button type="submit">Enviar</button>
         </div>
       </div>
     </form>
 
+    <!-- Script que cambia dinámicamente el fondo -->
     <script>
+      // Lista de imágenes de fondo que se van rotando
       const images = [
         "/static/img/bg1.jpg",
         "/static/img/bg2.jpg",
@@ -111,6 +127,8 @@
 
       let i = 0;
       const bg = document.body;
+
+      // Función para actualizar el fondo
       function setBackground(url) {
         bg.style.setProperty("--bg-url", `url(${url})`);
         document.styleSheets[0].insertRule(
@@ -118,11 +136,15 @@
           document.styleSheets[0].cssRules.length
         );
       }
+
+      // Establece la primera imagen al cargar
       setBackground(images[0]);
+
+      // Cambia automáticamente el fondo cada 2 segundos
       setInterval(() => {
         i = (i + 1) % images.length;
         setBackground(images[i]);
-      }, 2000);
+      }, 4000);
     </script>
   </body>
 </html>

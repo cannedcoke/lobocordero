@@ -1,4 +1,7 @@
+/* ======== FUENTE Y CONFIGURACIÓN GLOBAL ======== */
+/* esto define la fuente principal, el fondo dinámico y el control del scroll */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 body {
   width: 100%;
   min-height: 100vh;
@@ -9,6 +12,7 @@ body {
   overflow-x: hidden;
 }
 
+/* esto es el fondo borroso animado que se ve detrás de la página */
 body::before {
   content: "";
   position: fixed;
@@ -25,82 +29,8 @@ body::before {
   z-index: -1;
 }
 
-.card {
-  background-color: rgba(216, 229, 229, 0.9);
-  border: 1px solid #cfcfcf;
-  border-radius: 10px;
-  width: 550px;
-  margin: 130px auto;
-  padding: 40px;
-  color: #1a1a1a;
-  font-family: "Open Sans", sans-serif;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  transition: box-shadow 0.3s, transform 0.3s;
-  z-index: 0;
-}
-
-.card h1 {
-  text-align: center;
-  font-size: 28px;
-  font-weight: 600;
-  color: #000000;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 25px;
-  text-shadow: 2px 2px 8px rgba(10, 9, 9, 0.547);
-}
-.card h2 {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 600;
-  color: #000;
-  letter-spacing: 0.5px;
-  margin-top: -10px;
-  margin-bottom: 25px;
-  font-family: "Open Sans", sans-serif;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
-}
-
-p,
-label {
-  font-size: 15px;
-  color: #2b2b2b;
-  font-weight: 400;
- font-family: "Open Sans", sans-serif;
-}
-
-.btn-container {
-  display: flex;
-  justify-content: center;
-  padding: 40px;
-}
-
-button {
-  background-color: rgba(255, 255, 255, 0.7);
- font-family: "Open Sans", sans-serif;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  padding: 15px;
-  width: 150px;
-  border-radius: 5px;
-  border-width: 0.5px;
-  transition: all 0.6s ease;
-}
-
-button:hover {
-  background-color: rgba(207, 204, 204, 0.7);
-  transform: scale(1.05);
-}
-
-input[type="radio"] {
-  accent-color: #c21807;
-  cursor: pointer;
-}
-
+/* ======== HEADER ======== */
+/* este es el encabezado fijo superior con el logo y el menú */
 header {
   background-color: #1e2a38;
   color: white;
@@ -115,6 +45,8 @@ header {
   right: 0;
   z-index: 10;
 }
+
+/* bloque del logo con el texto del título */
 .logo-titulo {
   display: flex;
   align-items: center;
@@ -122,6 +54,7 @@ header {
   margin-left: -35px;
 }
 
+/* botón que contiene el logo */
 .logo-btn {
   background: none;
   border: none;
@@ -129,23 +62,117 @@ header {
   padding: 0;
 }
 
+/* imagen del logo */
 .logo-btn img {
   height: 50px;
   width: auto;
   border-radius: 5px;
 }
+
+/* enlaces del menú de navegación */
 nav a {
   color: white;
   text-decoration: none;
   margin: 0 15px;
   font-weight: bold;
- font-family: "Open Sans", sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
+/* ======== CONTENIDO PRINCIPAL ======== */
+/* esta es la tarjeta principal del formulario de encuesta */
+.card {
+  background-color: rgba(216, 229, 229, 0.9);
+  border: 1px solid #cfcfcf;
+  border-radius: 10px;
+  width: 550px;
+  margin: 130px auto;
+  padding: 40px;
+  color: #1a1a1a;
+  font-family: "Open Sans", sans-serif;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s, transform 0.3s;
+  z-index: 0;
+}
+
+/* efecto al pasar el mouse sobre la tarjeta */
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* título principal de la tarjeta */
+.card h1 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 25px;
+  text-shadow: 2px 2px 8px rgba(10, 9, 9, 0.547);
+}
+
+/* subtítulo (nombre del político) */
+.card h2 {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  color: #000;
+  letter-spacing: 0.5px;
+  margin-top: -10px;
+  margin-bottom: 25px;
+  font-family: "Open Sans", sans-serif;
+}
+
+/* texto de las preguntas y etiquetas */
+p,
+label {
+  font-size: 15px;
+  color: #2b2b2b;
+  font-weight: 400;
+  font-family: "Open Sans", sans-serif;
+}
+
+/* ======== BOTONES ======== */
+/* contenedor de los botones al final del formulario */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+/* estilo general de los botones */
+button {
+  background-color: rgba(255, 255, 255, 0.7);
+  font-family: "Open Sans", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  padding: 15px;
+  width: 150px;
+  border-radius: 5px;
+  border-width: 0.5px;
+  transition: all 0.6s ease;
+}
+
+/* efecto hover de los botones */
+button:hover {
+  background-color: rgba(207, 204, 204, 0.7);
+  transform: scale(1.05);
+}
+
+/* estilo de los botones tipo radio (encuesta) */
+input[type="radio"] {
+  accent-color: #c21807;
+  cursor: pointer;
+}
+
+/* ======== ELEMENTOS VISUALES ======== */
+/* esto difumina imágenes de fondo si se aplica */
 .img {
   filter: blur(5px);
 }
 
+/* botón redondo de volver arriba a la izquierda */
 .back-btn {
   position: fixed;
   top: 90px;
@@ -161,6 +188,7 @@ nav a {
   transition: background 0.3s ease, transform 0.3s ease;
 }
 
+/* efecto hover del botón de volver */
 .back-btn:hover {
   background: rgba(240, 240, 240, 0.9);
   cursor: pointer;

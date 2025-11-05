@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+    <!-- Configuración básica -->
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Resultados de {{ politico.nombre }}</title>
+
+    <!-- Librería Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Estilos básicos -->
     <style>
       body {
         margin: 40px;
@@ -14,113 +20,122 @@
         margin-bottom: 40px;
       }
     </style>
+
+    <!-- Enlace al CSS del proyecto -->
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='styles/styleEncuesta.css') }}"
     />
   </head>
-<header>
-  <body>
-     <div class="logo-titulo">
-    <button class="logo-btn">
-      <img src="/static/img/lobo_cordero.jpg" alt="Logo" height="50">
-    </button>
-    <h1>Lobo Cordero - Resultados</h1>
-  </div>
 
-  <nav>
-    <a href="{{ url_for('mostrar_encuesta') }}">Politicos</a>
-    <a href="{{ url_for('inicio') }}">Inicio</a>
-  </nav>
-</header>
-        <!-- Botón volver -->
+  <body>
+    <!-- Encabezado principal -->
+    <header>
+      <div class="logo-titulo">
+        <button class="logo-btn" aria-label="Inicio Lobo Cordero">
+          <img src="/static/img/lobo_cordero.jpg" alt="Logo de Lobo Cordero" height="50">
+        </button>
+        <h1>Lobo Cordero - Resultados</h1>
+      </div>
+
+      <nav aria-label="Navegación principal">
+        <a href="{{ url_for('mostrar_encuesta') }}">Políticos</a>
+        <a href="{{ url_for('inicio') }}">Inicio</a>
+      </nav>
+    </header>
+
+    <!-- Botón volver -->
     <a class="back-btn" href="{{ url_for('inicio') }}" onclick="history.back(); return false;" aria-label="Volver">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <polyline points="15 18 9 12 15 6" />
       </svg>
     </a>
+
+    <!-- Contenedor principal -->
     <div class="card">
       <h1>Resultados de la Encuesta</h1>
       <h2>{{ politico.nombre }} — {{ politico.partido }}</h2>
 
+      <!-- Gráficos generados dinámicamente -->
       {% for r in resultados %}
       <div>
         <h3>{{ r.pregunta }}</h3>
         <canvas id="grafico{{ loop.index }}"></canvas>
       </div>
       {% endfor %}
-
-      <script>
-        const datos = {{ resultados | tojson }};
-        
-        // etiquetas fijas por pregunta (sin base de datos)
-        const etiquetas = [
-          ["Siempre", "A veces", "Casi nunca", "Nunca"],
-          ["Alta", "Media", "Baja", "Inexistente"],
-          ["Sí, con eficiencia", "Parcialmente", "No, se desaprovechan", "No tengo información"],
-          ["Sí, sin dudas", "Tal vez", "No"],
-          ["Muy comprometido/a", "Algo comprometido/a", "Poco comprometido/a", "Nada comprometido/a"],
-          ["Regularmente", "Solo cuando lo obligan", "Casi nunca", "Nunca"],
-          ["Responsable", "Ineficiente", "Desconectado/a", "Transparente", "Dudosamente ético/a"]
-        ];
-
-        datos.forEach((r, i) => {
-          const ctx = document.getElementById('grafico' + (i + 1));
-          new Chart(ctx, {
-            type: 'bar',
-            data: {
-              labels: etiquetas[i] || ["Opción 1", "Opción 2", "Opción 3", "Opción 4"],
-              datasets: [{
-                label: 'Cantidad de respuestas',
-                data: r.valores.slice(0, (etiquetas[i] || []).length),
-                backgroundColor: ['#8A0303', '#8A0303', '#8A0303', '#8A0303']
-
-              }]
-            },
-            options: {
-              indexAxis: 'x',
-              responsive: true,
-              plugins: {
-                legend: { display: false },
-                title: { display: false }
-              },
-              scales: {
-                x: { beginAtZero: true, ticks: { precision: 0 } },
-                y: { ticks: { font: { size: 14 } } }
-              }
-            }
-          });
-        });
-
-        // fondo animado
-        const images = [
-          "/static/img/bg1.jpg",
-          "/static/img/bg2.jpg",
-          "/static/img/bg3.jpg",
-          "/static/img/bg4.jpg",
-          "/static/img/bg5.jpg",
-          "/static/img/bg6.jpg",
-          "/static/img/bg7.jpg",
-          "/static/img/bg8.jpg",
-        ];
-
-        let i = 0;
-        const bg = document.body;
-
-        function setBackground(url) {
-          bg.style.setProperty("--bg-url", `url(${url})`);
-          document.styleSheets[0].insertRule(
-            `body::before { background-image: url(${url}); }`,
-            document.styleSheets[0].cssRules.length
-          );
-        }
-
-        setBackground(images[0]);
-        setInterval(() => {
-          i = (i + 1) % images.length;
-          setBackground(images[i]);
-        }, 2000);
-      </script>
     </div>
+
+    <!-- Script de gráficos y fondo animado -->
+    <script >
+
+      const datos = JSON.parse('{{ resultados | tojson | safe }}');
+      // Etiquetas por pregunta
+      const etiquetas = [
+        ["Siempre", "A veces", "Casi nunca", "Nunca"],
+        ["Alta", "Media", "Baja", "Inexistente"],
+        ["Sí, con eficiencia", "Parcialmente", "No, se desaprovechan", "No tengo información"],
+        ["Sí, sin dudas", "Tal vez", "No"],
+        ["Muy comprometido/a", "Algo comprometido/a", "Poco comprometido/a", "Nada comprometido/a"],
+        ["Regularmente", "Solo cuando lo obligan", "Casi nunca", "Nunca"],
+        ["Responsable", "Ineficiente", "Desconectado/a", "Transparente", "Dudosamente ético/a"]
+      ];
+
+      // Genera un gráfico por cada pregunta
+      datos.forEach((r, i) => {
+        const ctx = document.getElementById('grafico' + (i + 1));
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: etiquetas[i] || ["Opción 1", "Opción 2", "Opción 3", "Opción 4"],
+            datasets: [{
+              label: 'Cantidad de respuestas',
+              data: r.valores.slice(0, (etiquetas[i] || []).length),
+              backgroundColor: Array((etiquetas[i] || []).length).fill('#8A0303')
+            }]
+          },
+          options: {
+            indexAxis: 'x',
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              title: { display: false }
+            },
+            scales: {
+              x: { beginAtZero: true, ticks: { precision: 0 } },
+              y: { ticks: { font: { size: 14 } } }
+            }
+          }
+        });
+      });
+
+      // Fondo animado
+      const images = [
+        "/static/img/bg1.jpg",
+        "/static/img/bg2.jpg",
+        "/static/img/bg3.jpg",
+        "/static/img/bg4.jpg",
+        "/static/img/bg5.jpg",
+        "/static/img/bg6.jpg",
+        "/static/img/bg7.jpg",
+        "/static/img/bg8.jpg",
+      ];
+
+      let i = 0;
+      const bg = document.body;
+
+      function setBackground(url) {
+        bg.style.setProperty("--bg-url", `url(${url})`);
+        document.styleSheets[0].insertRule(
+          `body::before { background-image: url(${url}); }`,
+          document.styleSheets[0].cssRules.length
+        );
+      }
+
+      setBackground(images[0]);
+      setInterval(() => {
+        i = (i + 1) % images.length;
+        setBackground(images[i]);
+      }, 4000);
+    </script>
   </body>
 </html>

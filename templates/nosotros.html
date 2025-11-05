@@ -1,0 +1,108 @@
+<!DOCTYPE html> <!-- Declara el tipo de documento HTML5 -->
+<html lang="es"> <!-- Indica que el contenido está en español -->
+  <head>
+    <meta charset="UTF-8" /> <!-- Define la codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Ajusta el diseño para pantallas móviles -->
+    <title>Sobre Nosotros - Lobo Cordero</title> <!-- Título mostrado en la pestaña del navegador -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/styleNosotros.css') }}" <!-- Enlace al archivo CSS principal -->
+    />
+  </head>
+
+  <body>
+    <!-- Encabezado principal del sitio -->
+    <header>
+      <!-- Botón accesible de volver (usa SVG como ícono de flecha) -->
+      <a class="back-btn" href="{{ url_for('inicio') }}" onclick="history.back(); return false;" aria-label="Volver">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </a>
+
+      <!-- Contenedor del logo y el título -->
+      <div class="logo-titulo">
+        <button class="logo-btn"> <!-- Botón del logo sin estilo de botón tradicional -->
+          <img
+            src="/static/img/lobo_cordero.jpg"
+            alt="Logo de Lobo Cordero"
+            height="50"
+          />
+        </button>
+        <h1>Sobre Nosotros</h1> <!-- Título del encabezado -->
+      </div>
+
+      <!-- Menú de navegación principal -->
+      <nav>
+        <a href="{{ url_for('inicio') }}">Inicio</a>
+        <a href="{{ url_for('mostrar_encuesta') }}">Políticos</a>
+      </nav>
+    </header>
+
+    <!-- Contenido principal de la página -->
+    <main class="principal">
+      <!-- Bloque superior: descripción del proyecto -->
+      <section class="intro">
+        <h2>¿Qué es LoboCordero?</h2>
+        <p>
+          Nuestro proyecto se trata de perfiles políticos; es una base de datos
+          que tiene como propósito generar conciencia en la gente sobre sus
+          representantes anteriores y actuales y dar el mensaje de que
+          <strong>“Tu voto importa”</strong>, para que las personas sean más
+          conscientes del poder que cada uno de nosotros tenemos en las manos.
+        </p>
+      </section>
+
+      <!-- Bloque inferior con bandera a la izquierda y texto a la derecha -->
+      <div class="contenido-horizontal">
+        <!-- Imagen con efecto hover de cambio entre bandera y hospital -->
+        <div class="bandera">
+          <img
+            src="/static/img/flag1.jpg"
+            alt="Bandera de Paraguay"
+            class="img-base"
+          />
+          <img
+            src="/static/img/flag2.jpeg"
+            alt="Hospital público en Paraguay"
+            class="img-next"
+          />
+        </div>
+
+        <!-- Texto de Misión y Visión -->
+        <div class="texto">
+          <h2>Misión</h2>
+          <p>
+            Promover la transparencia política y la participación ciudadana en un
+            entorno donde la desinformación suele ser la norma más que la
+            excepción. Nuestro propósito es ofrecer a cada ciudadano una
+            herramienta directa, imparcial y sencilla que permita entender mejor a
+            quienes ocupan cargos públicos y cómo sus acciones afectan la vida
+            diaria. Buscamos que la información no quede en manos de unos pocos,
+            sino que sea pública, clara y accesible para todos, porque la
+            confianza no se pide, se gana.
+          </p>
+
+          <h2>Visión</h2>
+          <p>
+            Ser un punto de referencia en Paraguay para la transparencia política,
+            desarrollando una plataforma que incomode a quienes prefieren el
+            silencio antes que la rendición de cuentas. Aspiramos a que los
+            ciudadanos participen con criterio y exigencia, no con promesas vacías
+            ni discursos bien ensayados. Queremos un país donde los datos hablen
+            más que las palabras, y donde la información deje de ser un lujo para
+            convertirse en un derecho básico.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Pie de página con los autores del proyecto -->
+    <footer>
+      <div class="footer-copy">
+        Miqueas Zarate • David Gonzalez • Damian Lopez • Camila Torres • Horacio
+        Sosa • Tobias Viera
+      </div>
+    </footer>
+  </body>
+</html>

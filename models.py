@@ -1,73 +1,82 @@
+# ======== MODELOS ========
+# Importa SQLAlchemy para manejar la base de datos usando un ORM (mapa objeto-relacional)
 from flask_sqlalchemy import SQLAlchemy
 
-db=SQLAlchemy()
+# Inicializa el objeto de base de datos
+db = SQLAlchemy()
 
+# ======== TABLA: POLITICO ========
 class Politico(db.Model):
-    __tablename__='politico'
-    id=db.Column(db.Integer, primary_key=True)
-    foto=db.Column(db.String(50), nullable=True )
-    nombre=db.Column(db.String(50), nullable=True)
-    partido=db.Column(db.String(50), nullable=True)
-    titulo=db.Column(db.Integer, nullable=True)
+    __tablename__ = 'politico'  # Nombre real de la tabla en la base de datos
 
-    respuesta=db.relationship('Respuesta', back_populates='politico')
-    proyectos = db.relationship('Proyecto', back_populates='politico')
-    def __init__(self,nombre, foto, partido, titulo):
-        self.nombre=nombre
-        self.foto=foto
-        self.partido=partido
-        self.titulo=titulo
+    # Columnas
+    id = db.Column(db.Integer, primary_key=True)           # Identificador único
+    foto = db.Column(db.String(50), nullable=True)         # Nombre del archivo de la foto
+    nombre = db.Column(db.String(50), nullable=True)       # Nombre del político
+    partido = db.Column(db.String(50), nullable=True)      # Partido político al que pertenece
+    titulo = db.Column(db.String(50), nullable=True)       # Cargo o título (Ej: Presidente, Senador)
 
+    # Relaciones
+    respuesta = db.relationship('Respuesta', back_populates='politico')  # Relación con las respuestas
+    proyectos = db.relationship('Proyecto', back_populates='politico')   # Relación con los proyectos
+
+    # Constructor
+    def __init__(self, nombre, partido, titulo, foto=None):
+        self.nombre = nombre
+        self.partido = partido
+        self.titulo = titulo
+        self.foto = foto
+
+
+# ======== TABLA: PREGUNTA ========
 class Pregunta(db.Model):
-    __tablename__='pregunta'
-    id_pregunta=db.Column(db.Integer, primary_key=True)
-    descripcion=db.Column(db.String(50), nullable=True)
+    __tablename__ = 'pregunta'  # Tabla de las preguntas de la encuesta
 
-    respuesta=db.relationship('Respuesta', back_populates='pregunta')
+    id_pregunta = db.Column(db.Integer, primary_key=True)       # Identificador único
+    descripcion = db.Column(db.String(100), nullable=False)     # Texto de la pregunta
+
+    # Relación con respuestas
+    respuesta = db.relationship('Respuesta', back_populates='pregunta')
+
+    # Constructor
     def __init__(self, descripcion):
-     
-        self.descripcion=descripcion
+        self.descripcion = descripcion
 
-class Opinion(db.Model):
-    __tablename__='opinion'
-    id_opinion=db.Column(db.Integer, primary_key=True)
-    descripcion=db.Column(db.String(50), nullable=True)
 
-    respuesta=db.relationship('Respuesta', back_populates='opinion')
-
-    def __init__(self,descripcion):
-        
-        self.descripcion=descripcion
+# ======== TABLA: RESPUESTA ========
 class Respuesta(db.Model):
-    __tablename__='respuesta'
-    id_respuesta=db.Column(db.Integer, primary_key=True)
-    id_politico=db.Column(db.Integer, db.ForeignKey('politico.id'))
-    id_pregunta=db.Column(db.Integer, db.ForeignKey('pregunta.id_pregunta'))
-    id_opinion=db.Column(db.Integer, db.ForeignKey('opinion.id_opinion'))
+    __tablename__ = 'respuesta'  # Tabla de las respuestas enviadas por los usuarios
 
-    politico=db.relationship('Politico', back_populates='respuesta')
-    pregunta=db.relationship('Pregunta', back_populates='respuesta')
-    opinion=db.relationship('Opinion', back_populates='respuesta')
+    id_respuesta = db.Column(db.Integer, primary_key=True)           # Identificador único
+    id_politico = db.Column(db.Integer, db.ForeignKey('politico.id'))  # Relación con político
+    id_pregunta = db.Column(db.Integer, db.ForeignKey('pregunta.id_pregunta'))  # Relación con pregunta
+    id_opinion = db.Column(db.Integer, nullable=False)                # Valor numérico de la opinión (1-5, etc.)
 
+    # Relaciones inversas
+    politico = db.relationship('Politico', back_populates='respuesta')
+    pregunta = db.relationship('Pregunta', back_populates='respuesta')
 
+    # Constructor
     def __init__(self, id_politico, id_pregunta, id_opinion):
-    
-        self.id_politico=id_politico
-        self.id_pregunta=id_pregunta
-        self.id_opinion=id_opinion
-            
+        self.id_politico = id_politico
+        self.id_pregunta = id_pregunta
+        self.id_opinion = id_opinion
+
+
+# ======== TABLA: PROYECTO ========
 class Proyecto(db.Model):
-    __tablename__='proyecto'
-    idproyecto=db.Column(db.Integer, primary_key=True, autoincrement=True)
-    id_politico=db.Column(db.Integer, db.ForeignKey('politico.id'))
-    titulo=db.Column(db.String(100))
-    descripcion=db.Column(db.Text, nullable=False)
+    __tablename__ = 'proyecto'  # Tabla de proyectos asociados a los políticos
 
-    politico=db.relationship('Politico', back_populates='proyectos')
-    def __init__(self, id_politico,titulo,descripcion):
-        self.id_politico=id_politico
-        self.titulo=titulo
-        self.descripcion=descripcion
-        
+    idproyecto = db.Column(db.Integer, primary_key=True, autoincrement=True)  # Identificador del proyecto
+    id_politico = db.Column(db.Integer, db.ForeignKey('politico.id'))         # Relación con político
+    titulo = db.Column(db.String(100), nullable=False)                        # Título del proyecto
+    descripcion = db.Column(db.Text, nullable=False)                          # Descripción detallada del proyecto
 
+    # Relación inversa con político
+    politico = db.relationship('Politico', back_populates='proyectos')
 
+    # Constructor
+    def __init__(self, id_politico, titulo, descripcion):
+        self.id_politico = id_politico
+        self.titulo = titulo
+        self.descripcion = descripcion

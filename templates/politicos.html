@@ -1,92 +1,112 @@
 <!doctype html>
 <html lang="es">
 <head>
+  <!-- Configuración general -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Tarjetas de Políticos</title>
-    <link rel="stylesheet" href="/static/styles/politicos.css">
-
+  <!-- Enlace al archivo de estilos -->
+  <link rel="stylesheet" href="/static/styles/politicos.css">
 </head>
+
 <body>
-{% with mensajes = get_flashed_messages() %}
-  {% if mensajes %}
-    <div class="flash">
-      {% for m in mensajes %}
-        <p>{{ m }}</p>
-      {% endfor %}
-    </div>
-  {% endif %}
-{% endwith %}
+  <!-- Mensajes flash del sistema -->
+  {% with mensajes = get_flashed_messages() %}
+    {% if mensajes %}
+      <div class="flash" role="alert">
+        {% for m in mensajes %}
+          <p>{{ m }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
 
+  <!-- Encabezado principal -->
   <header>
-  <div class="logo-titulo">
-    <button class="logo-btn">
-      <img src="/static/img/lobo_cordero.jpg" alt="Logo" height="50">
-    </button>
-    <h1>Lobo Cordero - Perfiles Políticos</h1>
-  </div>
+    <div class="logo-titulo">
+      <button class="logo-btn" aria-label="Inicio Lobo Cordero">
+        <img src="/static/img/lobo_cordero.jpg" alt="Logo de Lobo Cordero" height="50">
+      </button>
+      <h1>Lobo Cordero - Perfiles Políticos</h1>
+    </div>
 
-  <nav>
-    <a href="{{ url_for('inicio') }}">Inicio</a>
-  </nav>
-</header>
-    <a class="back-btn" href="{{ url_for('inicio') }}" onclick="history.back(); return false;" aria-label="Volver">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="15 18 9 12 15 6" />
-      </svg>
-    </a>
-  <section class="seccion">
+    <nav aria-label="Navegación principal">
+      <a href="{{ url_for('inicio') }}">Inicio</a>
+    </nav>
+  </header>
+
+  <!-- Botón volver accesible -->
+  <a class="back-btn" href="{{ url_for('inicio') }}" onclick="history.back(); return false;" aria-label="Volver">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  </a>
+
+  <!-- Contenedor de tarjetas -->
+  <section class="seccion" aria-label="Listado de políticos">
     {% for politico in politicos %}
-    <section class="scene">
-      <section class="tarjeta">
+    <section class="scene" aria-label="Tarjeta de {{ politico.nombre }}">
+      <section class="tarjeta" aria-live="polite">
+        
+        <!-- Lado frontal de la tarjeta -->
         <div class="cara frente">
           <div class="avatar">
             <img src="{{ url_for('static', filename='img/' + (politico.foto if politico.foto else 'default.jpg')) }}" alt="Foto de {{ politico.nombre }}">
           </div>
+
           <div class="info">
             <h3>{{ politico.nombre }}</h3>
             <p>Partido: {{ politico.partido }}</p>
             <p>Cargo: {{ politico.titulo }}</p>
           </div>
           
+          <!-- Botones de acción -->
           <div class="botones">
             <div class="boton-encuestas">
-              <button class="btn-encuesta" onclick="window.location.href='/encuesta/{{ politico.id }}'">Hacer encuesta</button>
-              <button class="btn-verencuesta" onclick="window.location.href='/resultados/{{ politico.id }}'">Ver encuesta</button>
+              <button class="btn-encuesta" onclick="window.location.href='/encuesta/{{ politico.id }}'" aria-label="Hacer encuesta a {{ politico.nombre }}">Hacer encuesta</button>
+              <button class="btn-verencuesta" onclick="window.location.href='/resultados/{{ politico.id }}'" aria-label="Ver resultados de {{ politico.nombre }}">Ver encuesta</button>
             </div>
-            <button class="btn-vermas">Ver más</button>
+            <button class="btn-vermas" aria-label="Ver proyectos de {{ politico.nombre }}">Ver más</button>
           </div>
         </div>
 
+        <!-- Lado posterior con proyectos -->
         <div class="cara dorso proyectos-scroll">
           <h3>Proyectos de {{ politico.nombre }}</h3>
           {% if politico.proyectos %}
-            <ul><br>
+            <ul>
+              <br>
               {% for proyecto in politico.proyectos %}
-              <strong>{{ proyecto.titulo }}</strong><br><br>
-                <li>
-                  {{ proyecto.descripcion }}
-                  <br><br>
-                </li>
+                <strong>{{ proyecto.titulo }}</strong><br><br>
+                <li>{{ proyecto.descripcion }}<br><br></li>
               {% endfor %}
             </ul>
           {% else %}
             <p>No hay proyectos registrados para este político.</p>
           {% endif %}
-          <button class="btn-volver">Volver</button>
+          <button class="btn-volver" aria-label="Volver a la información principal de {{ politico.nombre }}">Volver</button>
         </div>
       </section>
     </section>
     {% endfor %}
   </section>
 
+  <!-- Script para manejar el giro de las tarjetas -->
   <script>
-    document.querySelectorAll('.scene').forEach(scene=>{
-      const card=scene.querySelector('.tarjeta');
-      const verMas=card.querySelector('.btn-vermas');
-      const volver=card.querySelector('.btn-volver');
-      if(verMas){verMas.addEventListener('click',()=>card.classList.add('is-flipped'));}
-      if(volver){volver.addEventListener('click',()=>card.classList.remove('is-flipped'));}
+    document.querySelectorAll('.scene').forEach(scene => {
+      const card = scene.querySelector('.tarjeta');
+      const verMas = card.querySelector('.btn-vermas');
+      const volver = card.querySelector('.btn-volver');
+      
+      // Evento para girar la tarjeta al presionar "Ver más"
+      if (verMas) {
+        verMas.addEventListener('click', () => card.classList.add('is-flipped'));
+      }
+
+      // Evento para volver al frente al presionar "Volver"
+      if (volver) {
+        volver.addEventListener('click', () => card.classList.remove('is-flipped'));
+      }
     });
   </script>
 

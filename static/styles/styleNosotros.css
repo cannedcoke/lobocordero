@@ -1,0 +1,227 @@
+/* ======== FUENTE Y ESTILO BASE ======== */
+/* importa la fuente Open Sans desde Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap");
+
+/* define el estilo general del cuerpo de la página */
+body {
+  font-family: "Open Sans", sans-serif;
+  margin: 0;
+  background: linear-gradient(180deg, #f3f4f6, #e6eef0);
+  color: #1a1a1a;
+  overflow-x: hidden; /* evita el scroll horizontal */
+}
+
+/* ======== ENCABEZADO ======== */
+/* barra superior fija con logo y menú */
+header {
+  background-color: #1e2a38;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+/* contenedor del logo y título */
+.logo-titulo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* botón del logo sin fondo ni borde */
+.logo-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* imagen del logo redondeada */
+.logo-btn img {
+  height: 50px;
+  border-radius: 5px;
+}
+
+/* enlaces del menú principal */
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+}
+
+/* ======== CONTENIDO PRINCIPAL ======== */
+/* contenedor que engloba todo el contenido del cuerpo */
+.principal {
+  margin-top: 100px; /* deja espacio bajo el header fijo */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+  padding: 0 60px;
+  box-sizing: border-box;
+}
+
+/* bloque de introducción (“Quiénes somos”) */
+.intro {
+  text-align: center;
+  max-width: 1130px;
+  background-color: #1e2a3821; /* leve fondo gris azulado */
+  border-radius: 5px;
+}
+
+/* título dentro de la introducción */
+.intro h2 {
+  color: #1e2a38;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+/* texto del bloque de introducción */
+.intro p {
+  color: #333;
+  line-height: 1.7;
+  font-size: 1rem;
+  padding-left: 30px;
+  padding-right: 30px;
+  text-align: justify;
+}
+
+/* ======== BLOQUE HORIZONTAL (IMAGEN + TEXTO) ======== */
+/* alinea la imagen y el texto en horizontal */
+.contenido-horizontal {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 80px;
+  flex-wrap: wrap; /* permite que se acomode en pantallas pequeñas */
+}
+
+/* ======== EFECTO BANDERA ======== */
+/* contenedor de la imagen con efecto hover */
+.bandera {
+  position: relative;
+  width: 450px;
+  height: 550px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+/* configuración de las dos imágenes superpuestas */
+.bandera img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 4.2s ease, filter 1.2s ease;
+}
+
+/* imagen base visible por defecto */
+.img-base {
+  z-index: 1;
+  filter: none;
+  opacity: 1;
+}
+
+/* imagen secundaria oculta inicialmente */
+.img-next {
+  z-index: 2;
+  opacity: 0;
+}
+
+/* efecto al pasar el mouse: aplica filtro rojo y oculta la imagen base */
+.bandera:hover .img-base {
+  filter: brightness(45%) sepia(60%) hue-rotate(-50deg) saturate(900%) contrast(1.2);
+  opacity: 0;
+}
+
+/* muestra la imagen siguiente en el hover */
+.bandera:hover .img-next {
+  opacity: 1;
+}
+
+/* ======== BLOQUE DE TEXTO (MISIÓN Y VISIÓN) ======== */
+.texto {
+  max-width: 600px;
+  text-align: justify;
+}
+
+/* títulos dentro del texto */
+.texto h2 {
+  color: #1e2a38;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+/* párrafos del texto */
+.texto p {
+  color: #333;
+  line-height: 1.7;
+  margin-bottom: 35px;
+  font-size: 1rem;
+}
+
+/* ======== PIE DE PÁGINA ======== */
+footer {
+  background-color: #1e2a38;
+  color: #d1e8e2ee;
+  text-align: center;
+  padding: 30px 0;
+  font-size: 0.95rem;
+  height: 30px;
+  margin-top: 70px;
+}
+
+/* ======== BOTÓN “VOLVER” FIJO SUPERIOR ======== */
+
+/* botón redondo fijo arriba a la izquierda */
+.back-btn {
+  position: fixed;                /* siempre visible */
+  top: 90px;                      /* distancia desde arriba */
+  left: 25px;                     /* distancia desde el borde izquierdo */
+  z-index: 9999;                  /* prioridad alta */
+  background: rgba(255, 255, 255, 0.8);  /* fondo blanco translúcido */
+  border-radius: 50%;             /* forma circular */
+  padding: 10px;                  /* espacio interno */
+  display: flex;                  /* centra el ícono */
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);  /* sombra */
+  transition: background 0.3s ease, transform 0.3s ease; /* animación suave */
+}
+
+/* efecto al pasar el mouse */
+.back-btn:hover {
+  background: rgba(240, 240, 240, 0.9);  /* se aclara */
+  cursor: pointer;                       /* indica clic */
+  transform: scale(1.1);                 /* leve aumento */
+}
+
+/* configuración del ícono SVG dentro del botón */
+.back-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke: #181818;           /* color de la flecha */
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.3s ease;
+}
+
+/* cambia el color de la flecha al pasar el mouse */
+.back-btn:hover svg {
+  stroke: #0f172a;
+}

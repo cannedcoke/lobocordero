@@ -1,9 +1,15 @@
+
+# ======== IMPORTACIONES ========
 from flask import render_template, request, redirect, url_for, flash, get_flashed_messages
 from conexion import app, db
 from models import Respuesta, Politico, Pregunta, Proyecto
-
 from sqlalchemy import func
+from sqlalchemy.orm import joinedload
+
 app.secret_key = 'clave-segura'
+
+
+# ======== RUTAS BÁSICAS ========
 
 @app.route('/')
 def inicio():
@@ -14,6 +20,7 @@ def nosotros():
     return render_template('nosotros.html')
 
 
+# ======== ENCUESTA ========
 @app.route('/encuesta')
 @app.route('/encuesta/<int:id_politico>', methods=['GET', 'POST'])
 def encuesta(id_politico=None):
@@ -21,7 +28,7 @@ def encuesta(id_politico=None):
         p_first = Politico.query.first()
         if not p_first:
             return '<h2>No hay políticos cargados</h2>', 404
-        return redirect(url_for('encuesta', id_politico=p_first.id_politico))
+        return redirect(url_for('encuesta', id_politico=p_first.id))
 
     politico = Politico.query.get_or_404(id_politico)
 
@@ -36,12 +43,9 @@ def encuesta(id_politico=None):
                 id_opinion=int(opinion_valor)
             ))
         db.session.commit()
-
         flash('Encuesta guardada correctamente.')
         redirect_url = request.form.get('redirect_url') or url_for('mostrar_encuesta')
         return redirect(redirect_url)
-
-
 
     if Pregunta.query.count() == 0:
         for t in [
@@ -61,6 +65,7 @@ def encuesta(id_politico=None):
     return render_template('encuesta.html', p=politico, preguntas=preguntas, mensajes=mensajes)
 
 
+# ======== RESULTADOS ========
 @app.route('/resultados/<int:id_politico>')
 def resultados_por_politico(id_politico):
     politico = Politico.query.get_or_404(id_politico)
@@ -77,10 +82,8 @@ def resultados_por_politico(id_politico):
             .group_by(Respuesta.id_opinion)
             .all()
         )
-
         labels = [f"Opción {c[0]}" for c in conteos]
         valores = [c[1] for c in conteos]
-
         data.append({
             "pregunta": pregunta.descripcion,
             "labels": labels,
@@ -89,6 +92,8 @@ def resultados_por_politico(id_politico):
 
     return render_template('resultados.html', resultados=data, politico=politico)
 
+
+# ======== CARGA INICIAL ========
 def cargar_politicos_si_no_existen():
     datos = [
         {
@@ -97,7 +102,6 @@ def cargar_politicos_si_no_existen():
             "titulo": "Expresidente",
             "foto": "lugo.png",
             "proyectos": [
-                {"titulo": "Renegociación de Itaipú", "descripcion": "Buscó una mejor negociación del contrato de Itaipú con Brasil, buscando un mayor beneficio para Paraguay."},
                 {"titulo": "Impuesto a la soja", "descripcion": "Propuso nuevos impuestos a la exportación de soja para mejorar la distribución de la tierra."},
                 {"titulo": "Reforma agraria", "descripcion": "Prometió una reforma agraria para mejorar la distribución de la tierra en Paraguay, pero enfrentó bloqueos parlamentarios y no avanzó."},
                 {"titulo": "Lucha contra la corrupción", "descripcion": "Se propuso luchar contra el clientelismo y la corrupción en el gobierno."},
@@ -110,13 +114,7 @@ def cargar_politicos_si_no_existen():
             "titulo": "Presidente",
             "foto": "pena.png",
             "proyectos": [
-                {"titulo": "Centro Brilla", "descripcion": "Nueva infraestructura de redes eléctricas e iluminación LED en el casco histórico de Asunción."},
-                {"titulo": "Parque Caballero", "descripcion": "Revitalización de este espacio para la comunidad, con previsión de inauguración en 2026."},
-                {"titulo": "Plan 1.000", "descripcion": "Pavimentación de 1.000 kilómetros de rutas en todo el país."},
-                {"titulo": "Viaducto del Km 10", "descripcion": "Construcción de un viaducto en la Ruta PY02 en Alto Paraná."},
-                {"titulo": "Costanera Sur", "descripcion": "Construcción de viviendas y un espacio público para los ciudadanos en Asunción."},
                 {"titulo": "Hospital de Itauguá", "descripcion": "Proyecto para convertir el Hospital Nacional en un centro de referencia internacional."},
-                {"titulo": "Promesa incumplida: Tren de Cercanía y reforma del transporte público", "descripcion": "Prometió implementar el tren de cercanías y reformar el transporte, pero el tren fue cancelado y la reforma quedó en intención."},
                 {"titulo": "Promesa incumplida: 500.000 nuevos puestos de trabajo", "descripcion": "Comprometió crear medio millón de empleos en su primer año, pero el desempleo aumentó."},
                 {"titulo": "Promesa incumplida: Política exterior efectiva – cobro a Argentina por energía", "descripcion": "Prometió gestionar cobros por energía de Itaipú, pero no logró concretar los pagos."}
             ]
@@ -177,7 +175,8 @@ def cargar_politicos_si_no_existen():
             "proyectos": [
                 {"titulo": "Reforma del JEM", "descripcion": "Fortalece la independencia judicial en el Jurado de Enjuiciamiento de Magistrados."},
                 {"titulo": "Ley de compensación económica", "descripcion": "Compensa a Asunción por su condición de capital mejorando infraestructura."},
-                {"titulo": "Aumento de penas por corrupción", "descripcion": "Hasta 25 años para funcionarios en delitos graves."}
+                {"titulo": "Aumento de penas por corrupción", "descripcion": "Hasta 25 años para funcionarios en delitos graves."},
+                {"titulo": "Promesa incumplida: Transparencia y rendición", "descripcion": "Prometió rendir cuentas en su gestión, pero no presentó resultados concretos ni informes públicos."}
             ]
         },
         {
@@ -194,7 +193,6 @@ def cargar_politicos_si_no_existen():
         }
     ]
 
-
     for d in datos:
         existente = Politico.query.filter_by(nombre=d["nombre"]).first()
         if not existente:
@@ -206,28 +204,23 @@ def cargar_politicos_si_no_existen():
             )
             db.session.add(nuevo)
             db.session.commit()
-
             for p in d["proyectos"]:
                 db.session.add(Proyecto(
-                    id_politico=nuevo.id,  # corregido aquí
+                    id_politico=nuevo.id,
                     titulo=p["titulo"],
                     descripcion=p["descripcion"]
                 ))
-
-
     db.session.commit()
+
+
+# ======== FILTROS ========
 @app.route("/mostrarencuesta")
 def mostrar_encuesta():
-    from sqlalchemy.orm import joinedload
     politicos = Politico.query.options(joinedload(Politico.proyectos)).all()
-
     proyectos = Proyecto.query.all()
-
     if not politicos:
         return '<h2>No hay políticos cargados</h2>', 404
-
     return render_template('politicos.html', politicos=politicos, proyectos=proyectos)
-from sqlalchemy.orm import joinedload
 
 @app.route("/presidentes")
 def mostrar_presidentes():
@@ -263,8 +256,8 @@ def mostrar_senadores():
     return render_template('politicos.html', politicos=senadores)
 
 
+# ======== EJECUCIÓN PRINCIPAL ========
 if __name__ == '__main__':
     with app.app_context():
         cargar_politicos_si_no_existen()
     app.run(debug=True)
-
