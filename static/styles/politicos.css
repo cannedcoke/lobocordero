@@ -393,6 +393,7 @@ nav a {
 
   .tarjeta {
     min-height: 420px;
+    margin-top: 50px;
   }
 
   /* más espacio entre la foto y el texto */
