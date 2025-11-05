@@ -1,52 +1,62 @@
-
 # ======== IMPORTACIONES ========
+# Importa las funciones y clases necesarias de Flask y SQLAlchemy
 from flask import render_template, request, redirect, url_for, flash, get_flashed_messages
 from conexion import app, db
 from models import Respuesta, Politico, Pregunta, Proyecto
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 
+# Clave secreta para manejar sesiones y mensajes flash en Flask
 app.secret_key = 'clave-segura'
 
 
 # ======== RUTAS BÁSICAS ========
 
+# Ruta principal: renderiza la página de inicio
 @app.route('/')
 def inicio():
     return render_template('index.html')
 
+# Ruta "Nosotros": muestra la página con información institucional
 @app.route('/nosotros')
 def nosotros():
     return render_template('nosotros.html')
 
 
 # ======== ENCUESTA ========
+# Maneja la vista de la encuesta y el guardado de respuestas
 @app.route('/encuesta')
 @app.route('/encuesta/<int:id_politico>', methods=['GET', 'POST'])
 def encuesta(id_politico=None):
+    # Si no se especifica un político, redirige al primero disponible
     if id_politico is None:
         p_first = Politico.query.first()
         if not p_first:
             return '<h2>No hay políticos cargados</h2>', 404
         return redirect(url_for('encuesta', id_politico=p_first.id))
 
+    # Obtiene el político solicitado o muestra error 404 si no existe
     politico = Politico.query.get_or_404(id_politico)
 
+    # Si el método es POST, guarda las respuestas de la encuesta
     if request.method == 'POST':
         for i in range(1, 8):
             opinion_valor = request.form.get(f'preg{i}')
             if not opinion_valor:
                 continue
+            # Crea y guarda cada respuesta
             db.session.add(Respuesta(
                 id_politico=id_politico,
                 id_pregunta=i,
                 id_opinion=int(opinion_valor)
             ))
         db.session.commit()
+        # Muestra mensaje de éxito
         flash('Encuesta guardada correctamente.')
         redirect_url = request.form.get('redirect_url') or url_for('mostrar_encuesta')
         return redirect(redirect_url)
 
+    # Si no hay preguntas cargadas, las crea automáticamente
     if Pregunta.query.count() == 0:
         for t in [
             "¿Cumple con sus promesas?",
@@ -60,22 +70,28 @@ def encuesta(id_politico=None):
             db.session.add(Pregunta(descripcion=t))
         db.session.commit()
 
+    # Carga todas las preguntas disponibles y mensajes flash
     preguntas = Pregunta.query.all()
     mensajes = get_flashed_messages()
+
+    # Renderiza el template de encuesta con los datos del político
     return render_template('encuesta.html', p=politico, preguntas=preguntas, mensajes=mensajes)
 
 
 # ======== RESULTADOS ========
+# Muestra los resultados estadísticos por político
 @app.route('/resultados/<int:id_politico>')
 def resultados_por_politico(id_politico):
     politico = Politico.query.get_or_404(id_politico)
     preguntas = Pregunta.query.all()
     data = []
 
+    # Recorre todas las preguntas y cuenta respuestas por opción
     for pregunta in preguntas:
-        # Inicializa todas las opciones posibles (1 a 4)
+        # Inicializa todas las opciones con valor 0
         opciones = {1: 0, 2: 0, 3: 0, 4: 0}
 
+        # Obtiene los conteos agrupados por id_opinion
         conteos = (
             db.session.query(Respuesta.id_opinion, func.count(Respuesta.id_respuesta))
             .filter(
@@ -86,22 +102,27 @@ def resultados_por_politico(id_politico):
             .all()
         )
 
+        # Rellena el diccionario con los valores obtenidos
         for opinion, cantidad in conteos:
             opciones[opinion] = cantidad
 
+        # Prepara los datos para los gráficos
         labels = [f"Opción {k}" for k in opciones.keys()]
         valores = list(opciones.values())
 
+        # Agrega los resultados de cada pregunta
         data.append({
             "pregunta": pregunta.descripcion,
             "labels": labels,
             "valores": valores
         })
 
+    # Renderiza el template de resultados
     return render_template('resultados.html', resultados=data, politico=politico)
 
 
 # ======== CARGA INICIAL ========
+# Carga una lista predefinida de políticos y sus proyectos si no existen
 def cargar_politicos_si_no_existen():
     datos = [
         {
@@ -201,6 +222,7 @@ def cargar_politicos_si_no_existen():
         }
     ]
 
+    # Inserta los políticos y sus proyectos si no existen aún en la base
     for d in datos:
         existente = Politico.query.filter_by(nombre=d["nombre"]).first()
         if not existente:
@@ -212,6 +234,7 @@ def cargar_politicos_si_no_existen():
             )
             db.session.add(nuevo)
             db.session.commit()
+            # Agrega los proyectos asociados a cada político
             for p in d["proyectos"]:
                 db.session.add(Proyecto(
                     id_politico=nuevo.id,
@@ -222,6 +245,7 @@ def cargar_politicos_si_no_existen():
 
 
 # ======== FILTROS ========
+# Muestra todos los políticos cargados
 @app.route("/mostrarencuesta")
 def mostrar_encuesta():
     politicos = Politico.query.options(joinedload(Politico.proyectos)).all()
@@ -230,6 +254,7 @@ def mostrar_encuesta():
         return '<h2>No hay políticos cargados</h2>', 404
     return render_template('politicos.html', politicos=politicos, proyectos=proyectos)
 
+# Filtra y muestra solo presidentes
 @app.route("/presidentes")
 def mostrar_presidentes():
     presidentes = (
@@ -241,6 +266,7 @@ def mostrar_presidentes():
         return '<h2>No hay presidentes cargados</h2>', 404
     return render_template('politicos.html', politicos=presidentes)
 
+# Filtra y muestra solo diputados
 @app.route("/diputados")
 def mostrar_diputados():
     diputados = (
@@ -252,6 +278,7 @@ def mostrar_diputados():
         return '<h2>No hay diputados cargados</h2>', 404
     return render_template('politicos.html', politicos=diputados)
 
+# Filtra y muestra solo senadores
 @app.route("/senadores")
 def mostrar_senadores():
     senadores = (
@@ -265,6 +292,7 @@ def mostrar_senadores():
 
 
 # ======== EJECUCIÓN PRINCIPAL ========
+# Si el archivo se ejecuta directamente, carga los datos iniciales y arranca el servidor
 if __name__ == '__main__':
     with app.app_context():
         cargar_politicos_si_no_existen()
