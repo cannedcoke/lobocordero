@@ -73,6 +73,9 @@ def resultados_por_politico(id_politico):
     data = []
 
     for pregunta in preguntas:
+        # Inicializa todas las opciones posibles (1 a 4)
+        opciones = {1: 0, 2: 0, 3: 0, 4: 0}
+
         conteos = (
             db.session.query(Respuesta.id_opinion, func.count(Respuesta.id_respuesta))
             .filter(
@@ -82,8 +85,13 @@ def resultados_por_politico(id_politico):
             .group_by(Respuesta.id_opinion)
             .all()
         )
-        labels = [f"Opción {c[0]}" for c in conteos]
-        valores = [c[1] for c in conteos]
+
+        for opinion, cantidad in conteos:
+            opciones[opinion] = cantidad
+
+        labels = [f"Opción {k}" for k in opciones.keys()]
+        valores = list(opciones.values())
+
         data.append({
             "pregunta": pregunta.descripcion,
             "labels": labels,

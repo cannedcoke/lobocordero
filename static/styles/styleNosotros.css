@@ -139,11 +139,13 @@ nav a {
 .img-next {
   z-index: 2;
   opacity: 0;
+  filter: brightness(75%) sepia(40%) hue-rotate(-30deg) saturate(900%) contrast(1.1);
 }
+
 
 /* efecto al pasar el mouse: aplica filtro rojo y oculta la imagen base */
 .bandera:hover .img-base {
-  filter: brightness(45%) sepia(60%) hue-rotate(-50deg) saturate(900%) contrast(1.2);
+  filter: brightness(45%) sepia(60%) hue-rotate(-30deg) saturate(400%) contrast(1.2);
   opacity: 0;
 }
 
