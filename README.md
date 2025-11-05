@@ -64,7 +64,7 @@ Instalación y ejecución
    pip install flask sqlalchemy
 
 4. Ejecutar la aplicación:
-   flask run
+   python app.py( en las siguientes instancias se puede usar flask run)
 
 5. Acceder desde el navegador:
    [http://127.0.0.1:5000](http://127.0.0.1:5000)
